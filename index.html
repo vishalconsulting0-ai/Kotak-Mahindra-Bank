@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Vishal Consulting | Customer Enquiry</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(
+        135deg,
+        #780000 0%,
+        #c8102e 42%,
+        #ed343b 70%,
+        #8b0000 100%
+      );
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 22px;
+      color: #222;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 440px;
+      background: #fff;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .header {
+      background: #c8102e;
+      color: #fff;
+      text-align: center;
+      padding: 28px 20px;
+    }
+
+    .header h1 {
+      font-size: 25px;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .content {
+      padding: 25px 22px;
+    }
+
+    .content h2 {
+      font-size: 21px;
+      color: #9e0b20;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .description {
+      color: #555;
+      font-size: 14px;
+      line-height: 1.6;
+      text-align: center;
+      margin-bottom: 23px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      margin: 15px 0 7px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #ccc;
+      border-radius: 9px;
+      font-size: 16px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #c8102e;
+      box-shadow: 0 0 0 2px rgba(200, 16, 46, 0.12);
+    }
+
+    button {
+      width: 100%;
+      margin-top: 22px;
+      padding: 15px;
+      border: none;
+      border-radius: 9px;
+      background: #c8102e;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #990019;
+    }
+
+    button:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    #status {
+      display: none;
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.5;
+      margin-top: 15px;
+      overflow-wrap: anywhere;
+    }
+
+    .consent {
+      margin-top: 15px;
+      font-size: 12px;
+      color: #555;
+      line-height: 1.6;
+    }
+
+    .footer {
+      background: #f7f7f7;
+      padding: 15px;
+      text-align: center;
+      color: #666;
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .footer strong {
+      color: #a10b22;
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="container">
+    <header class="header">
+      <h1>VISHAL CONSULTING</h1>
+      <p>Customer Enquiry Portal</p>
+    </header>
+
+    <section class="content">
+      <h2>KOTAK MAHINDRA BANK</h2>
+
+      <p class="description">
+        Fill in your details below to continue to the next page.
+      </p>
+
+      <form id="leadForm">
+        <label for="name">Full Name</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          placeholder="Enter your full name"
+          minlength="2"
+          maxlength="80"
+          autocomplete="name"
+          required
+        >
+
+        <label for="phone">Mobile Number</label>
+        <input
+          type="tel"
+          id="phone"
+          name="phone"
+          placeholder="Enter 10-digit mobile number"
+          inputmode="numeric"
+          pattern="[6-9][0-9]{9}"
+          maxlength="10"
+          autocomplete="tel-national"
+          required
+        >
+
+        <p class="consent">
+          By submitting, you agree that your name and mobile number
+          may be collected for responding to your enquiry.
+        </p>
+
+        <button type="submit" id="submitBtn">
+          Submit & Continue
+        </button>
+
+        <p id="status" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <footer class="footer">
+      <strong>Vishal Consulting</strong><br>
+      Independent enquiry service. Not an official Kotak Mahindra
+      Bank website. Bank affiliation is not implied.
+      Never share your OTP, PIN, password or banking credentials.
+    </footer>
+  </main>
+
+  <script>
+    // 1. Apne naye Google Apps Script Web App ka URL yahan paste karein.
+    const GOOGLE_SCRIPT_URL =
+      "https://script.google.com/macros/s/AKfycbxT3B7vbcJ-GvGQ9DGMih359rRS3K1wJrVBSUCqAmEpPQceRilQWuVdWyWZfnFOMcE/exec";
+
+    // 2. Jis page par redirect karna hai, uska URL yahan paste karein.
+    const REDIRECT_URL =
+      "https://earningcred.jump2cloud.org/click?aid=326&oid=354&aff_sub2=code";
+
+    const form = document.getElementById("leadForm");
+    const submitBtn = document.getElementById("submitBtn");
+    const statusBox = document.getElementById("status");
+
+    function showStatus(message, color) {
+      statusBox.style.display = "block";
+      statusBox.style.color = color;
+      statusBox.textContent = message;
+    }
+
+    form.addEventListener("submit", async function(event) {
+      event.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+
+      if (name.length < 2) {
+        showStatus("Please enter your full name.", "#c8102e");
+        return;
+      }
+
+      if (!/^[6-9][0-9]{9}$/.test(phone)) {
+        showStatus("Please enter a valid 10-digit Indian mobile number.", "#c8102e");
+        return;
+      }
+
+      if (
+        GOOGLE_SCRIPT_URL.includes("PASTE_YOUR_") ||
+        REDIRECT_URL === "https://example.com"
+      ) {
+        showStatus(
+          "Please configure your Google Script URL and redirect URL first.",
+          "#c8102e"
+        );
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Please wait...";
+      showStatus("Submitting your enquiry...", "#444");
+
+      const formData = new URLSearchParams();
+      formData.append("name", name);
+      formData.append("phone", phone);
+
+      try {
+        /*
+          Google Apps Script receives the lead.
+          no-cors does not let the browser verify whether the Sheet
+          actually saved it, so the redirect is not proof of saving.
+        */
+        await fetch(GOOGLE_SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          body: formData
+        });
+
+        showStatus("Request sent. Continuing...", "#18713b");
+
+        // Redirect after the request has been sent.
+        window.location.assign(REDIRECT_URL);
+
+      } catch (error) {
+        showStatus(
+          "Could not send the request. Please try again.",
+          "#c8102e"
+        );
+
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Submit & Continue";
+      }
+    });
+  </script>
+
+</body>
+</html>
